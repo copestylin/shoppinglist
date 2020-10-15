@@ -2,17 +2,12 @@ import React, { useState } from 'react';
 import { isTemplateSpan } from 'typescript';
 import './App.css';
 
-/*
-
-*/
-
 interface ItemProps {
   name: string
   del: () => void
-  items: string[]
 }
 
-function ShoppingListItem({ name, del, items }: ItemProps) {
+function ShoppingListItem({ name, del }: ItemProps) {
   const [checked, setChecked] = useState<boolean>(false)
   return (
   <li><input type="checkbox" onClick={function() {setChecked(!checked);}} />
@@ -34,7 +29,7 @@ function App() {
       }}>add</button>
       <ul className="shopping-list">
         {items.map(function(name: string) {
-            return <ShoppingListItem key={name} name={name} items={items} del={() => setItems(items.filter((item) => name !== item))} /> 
+            return <ShoppingListItem key={name} name={name} del={() => setItems(items.filter((item) => name !== item))} /> 
         })}
      </ul>
     </div>
