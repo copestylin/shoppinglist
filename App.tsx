@@ -1,38 +1,68 @@
 import React, { useState } from 'react';
-import { isTemplateSpan } from 'typescript';
-import './App.css';
 
-interface ItemProps {
+interface List {
   name: string
-  del: () => void
+  items: Item[]
 }
 
-function ShoppingListItem({ name, del }: ItemProps) {
-  const [checked, setChecked] = useState<boolean>(false)
-  return (
-  <li><input type="checkbox" onClick={function() {setChecked(!checked);}} />
-  {checked ? <span style={{textDecoration:"line-through"}}>{name}</span> : name}<button onClick={del}>delete</button></li>
-  )}
+interface Item {
+  name: string
+  checked: boolean
+}
 
 function App() {
-  const [items, setItems] = useState<string[]>(["milk", "coffee", "gts3090"])
-  const [newItem, setNewItem] = useState<string>("")
+  const [activeTab, setActiveTab] = useState<string>("drinks")
+  const [newListTitle, setNewListTitle] = useState<string>("new list")
+  const [state, setState] = useState<List[]>([
+    {
+      name: "drinks",
+      items: [
+        { name: "coffee", checked: false },
+        { name: "coke", checked: false },
+      ]
+    },
+    {
+      name: "food",
+      items: [
+        { name: "bread", checked: false },
+        { name: "cookies", checked: false }
+      ],
+    },
+  ])
+
+  const addListToState = () => {
+    let newState = state.map((el) => { return el })
+    newState.push({ name: newListTitle, items: [] })
+    setState(newState)
+  }
+
+  const activeList = state.find((el) => {
+    return el.name === activeTab
+  })
+
+  if (!activeList) {
+    return <div>List not found</div>
+  }
+
   return (
-    <div id="app" style={{maxWidth:"500px", margin: "0 auto"}}>
-      <h1>Shopping List</h1>
-      <input value={newItem} onChange={function(e: React.ChangeEvent<HTMLInputElement>) {
-        setNewItem(e.currentTarget.value);
-      }} />
-      <button onClick={() => {
-        setItems([...items, newItem])
-        setNewItem("")
-      }}>add</button>
-      <ul className="shopping-list">
-        {items.map(function(name: string) {
-            return <ShoppingListItem key={name} name={name} del={() => setItems(items.filter((item) => name !== item))} /> 
+    <h1 className="App">
+      NINJA SHOPPING LIST - ACTIVE TAB:{activeTab}
+      <br />
+      {state.map(el => {
+        return <button onClick={() => {
+          setActiveTab(el.name)
+        }}>{el.name}</button>
+      })}
+      <input onChange={(e) => {
+        setNewListTitle(e.currentTarget.value)
+      }} value={newListTitle}></input>
+      <button onClick={() => { addListToState() }}>+</button>
+      <div>
+        {activeList.items.map((el) => {
+          return <li>{el.name}: {el.checked.toString()}</li>
         })}
-     </ul>
-    </div>
+      </div>
+    </h1>
   );
 }
 
