@@ -14,6 +14,7 @@ function App() {
   const [activeTab, setActiveTab] = useState<string>("drinks")
   const [checked, setChecked] = useState<boolean>(false)
   const [newListTitle, setNewListTitle] = useState<string>("new list")
+  const [newItemValue, setNewItemValue] = useState<string>("")
   const [state, setState] = useState<List[]>([
     {
       name: "drinks",
@@ -37,6 +38,31 @@ function App() {
     setState(newState)
   }
 
+
+  //need to check IF is in the right list, and only apply then
+
+  const addItemToList = () => {
+    let newLists = state.map((el) => {
+      // Make a copy of items
+      const newItems = el.items.map(item => {
+        return item
+      })
+
+
+      // Push new item into the copied array
+      newItems.push({ name: newItemValue, checked: false })
+
+
+      // Build and return new list
+      return {
+        name: el.name,
+        items: newItems,
+      }
+    })
+    setState(newLists)
+  }
+
+
   const activeList = state.find((el) => {
     return el.name === activeTab
   })
@@ -52,38 +78,43 @@ function App() {
       <br />
 
 
-      {state.map(el => {
-        return <button onClick={() => {
-          setActiveTab(el.name)
-        }}>{el.name}</button>
-      })}
-
-
       <input onChange={(e) => {
         setNewListTitle(e.currentTarget.value)
       }} value={newListTitle}></input>
       <button onClick={() => { addListToState() }}>+</button>
       <br />
 
-      
-        {activeList.items.map((el) => {
-          return (
-            <>
-          <input type="checkbox" 
-            checked={el.checked} 
-            onChange={() => {setChecked(el.checked = !checked)}}
-          />
-          
-          {el.checked ? <u>{el.name}</u> : el.name}
+      {state.map(el => {
+        return <button onClick={() => {
+          setActiveTab(el.name)
+        }}>{el.name}</button>
+      })}
+      <br /><br />
 
-          <button>delete</button><br />
+      <input onChange={(e) => {
+        setNewItemValue(e.currentTarget.value)
+      }} value={newItemValue}></input>
+      <button onClick={() => { addItemToList() }}>+</button>
+      <br />
+
+      {activeList.items.map((el) => {
+        return (
+          <>
+            <input type="checkbox"
+              checked={el.checked}
+              onChange={() => { setChecked(el.checked = !checked) }}
+            />
+
+            {el.checked ? <u>{el.name}</u> : el.name}
+
+            <button>delete</button><br />
 
           </>
-          ) 
-        })}
+        )
+      })}
 
 
-      
+
     </h1>
   );
 }
