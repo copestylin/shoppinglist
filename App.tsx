@@ -39,19 +39,20 @@ function App() {
   }
 
 
-  //need to check IF is in the right list, and only apply then
-
   const addItemToList = () => {
+
     let newLists = state.map((el) => {
+
       // Make a copy of items
       const newItems = el.items.map(item => {
+
         return item
       })
-
-
-      // Push new item into the copied array
-      newItems.push({ name: newItemValue, checked: false })
-
+      // Need to check IF is in the right list, and only apply then
+      if (activeTab === el.name) {
+        // Push new item into the copied array
+        newItems.push({ name: newItemValue, checked: false })
+      }
 
       // Build and return new list
       return {
