@@ -109,21 +109,19 @@ function App() {
   return (
 
     <h1 className="App">
-      NINJA SHOPPING LIST - ACTIVE TAB:{activeTab}
-      <br />
 
-      <input onChange={(e) => {
-        setNewListTitle(e.currentTarget.value)
-      }} value={newListTitle}></input>
-      <button onClick={() => { addListToState() }}>+</button>
-      <br />
+      <Header activeTab={activeTab} />
 
-      {state.map(el => {
-        return <button onClick={() => {
-          setActiveTab(el.name)
-        }}>{el.name}</button>
-      })}
-      <br /><br />
+      <AddList
+        setNewListTitle={setNewListTitle}
+        newListTitle={newListTitle}
+        addListToState={addListToState}
+      />
+
+      <SelectList
+        state={state}
+        setActiveTab={setActiveTab}
+      />
 
       <AddItem
         setNewItemValue={setNewItemValue}
@@ -149,6 +147,59 @@ function App() {
   );
 }
 
+interface HeaderProps {
+  activeTab: string
+}
+
+const Header = ({ activeTab }: HeaderProps) => {
+  return <>NINJA SHOPPING LIST - ACTIVE TAB: { activeTab} <br /></>
+}
+
+interface AddListProps {
+  setNewListTitle: (value: string) => void
+  newListTitle: string
+  addListToState: () => void
+}
+
+const AddList = (props: AddListProps) => {
+  const {
+    setNewListTitle,
+    newListTitle,
+    addListToState
+  } = props
+  return (
+    <>
+      <input onChange={(e) => {
+        setNewListTitle(e.currentTarget.value)
+      }} value={newListTitle}></input>
+      <button onClick={() => { addListToState() }}>+</button>
+      <br />
+    </>
+  )
+}
+
+interface SelectListProps {
+  state: List[]
+  setActiveTab: (tab: string) => void
+}
+
+const SelectList = (props: SelectListProps) => {
+  const {
+    state,
+    setActiveTab
+  } = props
+
+  return (
+    <>
+      {state.map(el => {
+        return <button onClick={() => {
+          setActiveTab(el.name)
+        }}>{el.name}</button>
+      })}
+      <br /><br />
+    </>
+  )
+}
 
 interface AddItemProps {
   setNewItemValue: (value: string) => void
