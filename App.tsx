@@ -12,6 +12,7 @@ interface Item {
 
 function App() {
   const [activeTab, setActiveTab] = useState<string>("drinks")
+  const [checked, setChecked] = useState<boolean>(false)
   const [newListTitle, setNewListTitle] = useState<string>("new list")
   const [state, setState] = useState<List[]>([
     {
@@ -59,7 +60,15 @@ function App() {
       <button onClick={() => { addListToState() }}>+</button>
       <div>
         {activeList.items.map((el) => {
-          return <li>{el.name}: {el.checked.toString()}</li>
+          return (
+            <>
+          <input type="checkbox" 
+            checked={el.checked} 
+            onChange={() => {setChecked(el.checked = !checked)}}
+          />
+          <li>{el.checked ? <u>{el.name}</u> : el.name}</li>
+          </>
+          ) 
         })}
       </div>
     </h1>
