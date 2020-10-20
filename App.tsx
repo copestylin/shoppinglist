@@ -140,9 +140,12 @@ function App() {
               onChange={() => { setChecked(el.checked = !checked) }}
             />
 
-            {el.checked ? <u>{el.name}</u> : el.name}
+            <ShoppingItem
+              name={el.name}
+              isChecked={el.checked}
+              deleteFromList={() => { deleteFromList(activeList.name, el.name) }}
+            />
 
-            <button onClick={() => { deleteFromList(activeList.name, el.name) }}>delete</button>
             <br />
 
           </>
