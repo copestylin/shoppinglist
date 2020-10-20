@@ -46,19 +46,26 @@ function App() {
   }
 
   return (
+
     <h1 className="App">
       NINJA SHOPPING LIST - ACTIVE TAB:{activeTab}
       <br />
+
+
       {state.map(el => {
         return <button onClick={() => {
           setActiveTab(el.name)
         }}>{el.name}</button>
       })}
+
+
       <input onChange={(e) => {
         setNewListTitle(e.currentTarget.value)
       }} value={newListTitle}></input>
       <button onClick={() => { addListToState() }}>+</button>
-      <div>
+      <br />
+
+      
         {activeList.items.map((el) => {
           return (
             <>
@@ -66,11 +73,17 @@ function App() {
             checked={el.checked} 
             onChange={() => {setChecked(el.checked = !checked)}}
           />
-          <li>{el.checked ? <u>{el.name}</u> : el.name}</li>
+          
+          {el.checked ? <u>{el.name}</u> : el.name}
+
+          <button>delete</button><br />
+
           </>
           ) 
         })}
-      </div>
+
+
+      
     </h1>
   );
 }
