@@ -125,25 +125,23 @@ function App() {
       })}
       <br /><br />
 
-      <input onChange={(e) => {
-        setNewItemValue(e.currentTarget.value)
-      }} value={newItemValue}></input>
-      <button onClick={() => { addItemToList() }}>+</button>
-      <br />
+      <AddItem
+        setNewItemValue={setNewItemValue}
+        newItemValue={newItemValue}
+        addItemToList={addItemToList}
+      />
 
       {activeList.items.map((el) => {
+
         return (
           <>
-
             <ShoppingItem
               name={el.name}
               isChecked={el.checked}
               deleteFromList={() => { deleteFromList(activeList.name, el.name) }}
               setChecked={() => { setChecked(el.checked = !checked) }}
             />
-
             <br />
-
           </>
         )
       })}
@@ -151,6 +149,30 @@ function App() {
   );
 }
 
+
+interface AddItemProps {
+  setNewItemValue: (value: string) => void
+  newItemValue: string
+  addItemToList: () => void
+}
+
+const AddItem = (props: AddItemProps) => {
+  const {
+    setNewItemValue,
+    newItemValue,
+    addItemToList
+  } = props
+
+  return (
+    <>
+      <input onChange={(e) => {
+        setNewItemValue(e.currentTarget.value)
+      }} value={newItemValue}></input>
+      <button onClick={() => { addItemToList() }}>+</button>
+      <br />
+    </>
+  )
+}
 
 interface ShoppingItemProps {
   name: string
@@ -168,8 +190,6 @@ const ShoppingItem = (props: ShoppingItemProps) => {
     setChecked,
   } = props
 
-
-
   return (
     <span>
 
@@ -184,7 +204,6 @@ const ShoppingItem = (props: ShoppingItemProps) => {
         deleteFromList()
       }}>Delete</button>
     </span>
-
   )
 }
 
