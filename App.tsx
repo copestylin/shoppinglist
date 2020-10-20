@@ -11,8 +11,8 @@ interface Item {
 }
 
 function App() {
-  const [activeTab, setActiveTab] = useState<string>("drinks")
   const [checked, setChecked] = useState<boolean>(false)
+  const [activeTab, setActiveTab] = useState<string>("drinks")
   const [newListTitle, setNewListTitle] = useState<string>("new list")
   const [newItemValue, setNewItemValue] = useState<string>("")
   const [state, setState] = useState<List[]>([
@@ -112,7 +112,6 @@ function App() {
       NINJA SHOPPING LIST - ACTIVE TAB:{activeTab}
       <br />
 
-
       <input onChange={(e) => {
         setNewListTitle(e.currentTarget.value)
       }} value={newListTitle}></input>
@@ -135,15 +134,12 @@ function App() {
       {activeList.items.map((el) => {
         return (
           <>
-            <input type="checkbox"
-              checked={el.checked}
-              onChange={() => { setChecked(el.checked = !checked) }}
-            />
 
             <ShoppingItem
               name={el.name}
               isChecked={el.checked}
               deleteFromList={() => { deleteFromList(activeList.name, el.name) }}
+              setChecked={() => { setChecked(el.checked = !checked) }}
             />
 
             <br />
@@ -160,6 +156,7 @@ interface ShoppingItemProps {
   name: string
   isChecked: boolean
   deleteFromList: () => void
+  setChecked: (check: boolean) => void
 }
 
 const ShoppingItem = (props: ShoppingItemProps) => {
@@ -168,16 +165,25 @@ const ShoppingItem = (props: ShoppingItemProps) => {
     name,
     isChecked,
     deleteFromList,
+    setChecked,
   } = props
 
+
+
   return (
-    <li>
+    <span>
+
+      <input type="checkbox"
+        checked={isChecked}
+        onChange={() => { setChecked(!isChecked) }}
+      />
+
       {name}: {isChecked.toString()}
       <button onClick={() => {
         // Function closure declared in parent component
         deleteFromList()
       }}>Delete</button>
-    </li>
+    </span>
 
   )
 }
