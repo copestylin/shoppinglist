@@ -48,6 +48,7 @@ function App() {
 
         return item
       })
+
       // Need to check IF is in the right list, and only apply then
       if (activeTab === el.name) {
         // Push new item into the copied array
@@ -62,6 +63,39 @@ function App() {
     })
     setState(newLists)
   }
+
+
+
+  const deleteFromList = (listToDeleteFrom: string, itemToDelete: string) => {
+    // Iterate over every list in the state
+    let newState = state.map(el => {
+
+      // Return the same list if its not the listToDeleteFrom
+      if (el.name !== listToDeleteFrom) {
+        return el
+      }
+
+      // Iterate over every item in the list we want to delete from
+      const newItems = el.items.filter(item => {
+        // Do not return the item if the name matches itemToDelete
+        if (item.name === itemToDelete) {
+          return false
+        }
+        // Return the item
+        return true
+      })
+
+      // Build new list
+      return {
+        name: el.name,
+        items: newItems,
+      }
+    })
+
+    // Set updated lists
+    setState(newState)
+  }
+
 
 
   const activeList = state.find((el) => {
@@ -108,16 +142,41 @@ function App() {
 
             {el.checked ? <u>{el.name}</u> : el.name}
 
-            <button>delete</button><br />
+            <button onClick={() => { deleteFromList(activeList.name, el.name) }}>delete</button>
+            <br />
 
           </>
         )
       })}
-
-
-
     </h1>
   );
+}
+
+
+interface ShoppingItemProps {
+  name: string
+  isChecked: boolean
+  deleteFromList: () => void
+}
+
+const ShoppingItem = (props: ShoppingItemProps) => {
+  // Destructuring fields from the props
+  const {
+    name,
+    isChecked,
+    deleteFromList,
+  } = props
+
+  return (
+    <li>
+      {name}: {isChecked.toString()}
+      <button onClick={() => {
+        // Function closure declared in parent component
+        deleteFromList()
+      }}>Delete</button>
+    </li>
+
+  )
 }
 
 export default App;
